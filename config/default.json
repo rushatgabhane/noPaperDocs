@@ -1,0 +1,4 @@
+{
+    "mongoURL": "mongodb://127.0.0.1/no_paper_docs",
+    "port": 3500
+}
