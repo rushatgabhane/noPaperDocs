@@ -1,4 +1,5 @@
 {
     "mongoURL": "mongodb://127.0.0.1/no_paper_docs",
-    "port": 3500
+    "port": 3500,
+    "jwtSecret": "sf sdflskj fweoiewp dfs sdfkl weoruow cxvbm,.n  erjke wjoj sd fds"
 }
