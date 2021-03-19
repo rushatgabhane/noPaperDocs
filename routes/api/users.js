@@ -1,10 +1,12 @@
 const express = require('express')
 const router = express.Router()
 const bcrypt = require('bcryptjs')
+const crypto = require('crypto')
 const gravatar = require('gravatar')
 const jwt = require('jsonwebtoken')
 const config = require('config')
 const {check, validationResult} = require('express-validator')
+const fs = require('fs')
 
 const User = require('../../models/User')
 
@@ -30,6 +32,14 @@ router.post('/', [
             return res.status(400).json({errors: [{msg: 'Email is already registered. Please login.'}]})
         }
 
+        // generate user root directory id for storing all pdfs to
+        const path = process.env.PWD +'/userPDFs/' + crypto.randomBytes(24).toString('hex') + '/'
+
+        await fs.promises.mkdir(path)
+
+        const files = {
+            rootPath : path
+        }
         // generate gravatar
         const avatar = gravatar.url(email, {
             s: '200',
@@ -41,7 +51,8 @@ router.post('/', [
             email,
             password,
             avatar,
-            companyName
+            companyName,
+            files
         })
         // encrypt password
         const salt = await bcrypt.genSalt(10)

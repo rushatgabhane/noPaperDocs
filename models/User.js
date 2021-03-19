@@ -14,6 +14,12 @@ const UserSchema = new mongoose.Schema({
     },
     companyName: {
         type: String
+    },
+    files : {
+        rootPath : {
+            type: String,
+            required: true
+        }
     }
 })
 
