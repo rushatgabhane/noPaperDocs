@@ -45,27 +45,14 @@ router.post('/', [
             r: 'pg',
             d: 'mm'
         })
-        const d1_2 = {
-            files: ["d1File_2", "d1File_2", "d1File_2"],
-            folderName: "d1Folder_2"
-        }
-        const d1_1 = {
-            files: ["d1File", "d1File", "d1File"],
-            folderName: "d1Folder"
-        }
-        const folder = {
-            files: ["file1", "file2"],
-            folderName: "folder1",
-            folders : [d1_1, d1_2]
-        }
-        const directoryStructure = [folder]
+        
         user = new User({
             email,
             password,
             avatar,
             companyName,
             path,
-            directoryStructure
+            files
         })
         // encrypt password
         const salt = await bcrypt.genSalt(10)
@@ -80,9 +67,8 @@ router.post('/', [
             }
         }
         console.log(user, "***************************************************************")
-        console.log(util.inspect(user.directoryStructure, false, null, true /* enable colors */))
+        console.log(util.inspect(user.files, false, null, true /* enable colors */))
 
-        // console.log(user.directoryStructure, typeof user.directoryStructure)
         jwt.sign(payload, config.get('jwtSecret'), {expiresIn: 36000}, (err, token) => {
             if(err) throw err
             res.json({token})
