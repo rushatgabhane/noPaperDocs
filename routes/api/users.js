@@ -7,6 +7,8 @@ const jwt = require('jsonwebtoken')
 const config = require('config')
 const {check, validationResult} = require('express-validator')
 const fs = require('fs')
+const util = require('util')
+
 
 const User = require('../../models/User')
 
@@ -37,22 +39,33 @@ router.post('/', [
 
         await fs.promises.mkdir(path)
 
-        const files = {
-            rootPath : path
-        }
         // generate gravatar
         const avatar = gravatar.url(email, {
             s: '200',
             r: 'pg',
             d: 'mm'
         })
-        
+        const d1_2 = {
+            files: ["d1File_2", "d1File_2", "d1File_2"],
+            folderName: "d1Folder_2"
+        }
+        const d1_1 = {
+            files: ["d1File", "d1File", "d1File"],
+            folderName: "d1Folder"
+        }
+        const folder = {
+            files: ["file1", "file2"],
+            folderName: "folder1",
+            folders : [d1_1, d1_2]
+        }
+        const directoryStructure = [folder]
         user = new User({
             email,
             password,
             avatar,
             companyName,
-            files
+            path,
+            directoryStructure
         })
         // encrypt password
         const salt = await bcrypt.genSalt(10)
@@ -66,6 +79,10 @@ router.post('/', [
                 id: user.id
             }
         }
+        console.log(user, "***************************************************************")
+        console.log(util.inspect(user.directoryStructure, false, null, true /* enable colors */))
+
+        // console.log(user.directoryStructure, typeof user.directoryStructure)
         jwt.sign(payload, config.get('jwtSecret'), {expiresIn: 36000}, (err, token) => {
             if(err) throw err
             res.json({token})

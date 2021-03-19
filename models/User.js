@@ -1,4 +1,15 @@
 const mongoose = require('mongoose')
+
+const FolderSchema = new mongoose.Schema({
+    folderName: {
+        type : String,
+         required: true
+    },
+    files: [{type: String}]
+})
+
+FolderSchema.add({folders: [FolderSchema]}) // recursive folder structure
+
 const UserSchema = new mongoose.Schema({
     email: {
         type: String,
@@ -15,12 +26,11 @@ const UserSchema = new mongoose.Schema({
     companyName: {
         type: String
     },
-    files : {
-        rootPath : {
-            type: String,
-            required: true
-        }
-    }
+    path : {
+        type: String,
+        required: true
+    },
+    directoryStructure : [FolderSchema]
 })
 
 module.exports = User = mongoose.model('user', UserSchema)
