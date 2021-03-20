@@ -2,7 +2,7 @@ const mongoose = require('mongoose')
 
 const FileSchema = new mongoose.Schema({
     fileName : {type: String, required: true},
-    tags: [String]
+    tags: [String],
 }, {timestamps: true})
 
 const UserSchema = new mongoose.Schema({

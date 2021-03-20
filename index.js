@@ -14,7 +14,6 @@ app.get('/', (req, res) => {
 
 app.use('/api/users', require('./routes/api/users'))
 app.use('/api/qrcode', require('./routes/api/qrcode'))
-app.use('/api/account', require('./routes/api/account'))
 app.use('/api/auth', require('./routes/api/auth'))
 
 // @route  GET invalid routes

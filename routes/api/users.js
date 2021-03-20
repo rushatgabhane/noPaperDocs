@@ -51,8 +51,7 @@ router.post('/', [
             password,
             avatar,
             companyName,
-            path,
-            files
+            path
         })
         // encrypt password
         const salt = await bcrypt.genSalt(10)
@@ -66,8 +65,6 @@ router.post('/', [
                 id: user.id
             }
         }
-        console.log(user, "***************************************************************")
-        console.log(util.inspect(user.files, false, null, true /* enable colors */))
 
         jwt.sign(payload, config.get('jwtSecret'), {expiresIn: 36000}, (err, token) => {
             if(err) throw err
