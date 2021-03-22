@@ -16,8 +16,9 @@ const User = require('../../models/User')
 // @desc sign up a user
 // @access public
 router.post('/', [
-    check('email', 'Please include a valid email').isEmail(),
-    check('password', 'Please enter a password with 8 or more characters').isLength({min:8, max:32})
+    check('email', 'Please include a valid email').isEmail().escape().trim(),
+    check('password', 'Please enter a password with 8 or more characters').isLength({min:8, max:32}).escape().trim(),
+    check('companyName').escape()
 ], async (req, res) => {
     const errors = validationResult(req)
     
@@ -35,9 +36,9 @@ router.post('/', [
         }
 
         // generate user root directory id for storing all pdfs to
-        const path = process.env.PWD +'/userPDFs/' + crypto.randomBytes(24).toString('hex') + '/'
+        // const path = process.env.PWD +'/userPDFs/' + crypto.randomBytes(10).toString('hex') + '/'
 
-        await fs.promises.mkdir(path)
+        // await fs.promises.mkdir(path)
 
         // generate gravatar
         const avatar = gravatar.url(email, {
@@ -50,8 +51,7 @@ router.post('/', [
             email,
             password,
             avatar,
-            companyName,
-            path
+            companyName
         })
         // encrypt password
         const salt = await bcrypt.genSalt(10)
@@ -59,6 +59,7 @@ router.post('/', [
 
         // save user to database
         await user.save()
+        await fs.promises.mkdir(process.env.PWD +'/userPDFs/' + user.id + '/')
         // return jsonwebtoken
         const payload = {
             user: {
@@ -66,7 +67,7 @@ router.post('/', [
             }
         }
 
-        jwt.sign(payload, config.get('jwtSecret'), {expiresIn: 36000}, (err, token) => {
+        jwt.sign(payload, config.get('jwtSecret'), {expiresIn: 360000}, (err, token) => {
             if(err) throw err
             res.json({token})
         })
