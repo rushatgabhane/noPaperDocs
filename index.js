@@ -16,7 +16,7 @@ app.use('/api/users', require('./routes/api/users'))
 app.use('/api/qrcode', require('./routes/api/qrcode'))
 app.use('/api/auth', require('./routes/api/auth'))
 app.use('/api/profile', require('./routes/api/profile'))
-app.use('/api/upload', require('./routes/api/upload'))
+app.use('/api/file', require('./routes/api/file'))
 
 // @route  GET invalid routes
 // @desc   Display page not found message
